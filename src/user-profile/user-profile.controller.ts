@@ -1,18 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { UserProfileService } from './user-profile.service';
+import { Prisma } from '@prisma/client';
 
 @Controller('user-profile')
 export class UserProfileController {
   constructor(private readonly userProfileService: UserProfileService) {}
 
   @Post()
-  create(@Body() createUserProfileDto: CreateUserProfileDto) {
+  create(@Body() createUserProfileDto: Prisma.UsersCreateInput) {
     return this.userProfileService.create(createUserProfileDto);
   }
 
   @Get()
-  findAll() {
-    return this.userProfileService.findAll();
+  findAll(@Query('role') role?: 'ADMIN' | 'STUDENT' | 'TEACHER') {
+    return this.userProfileService.findAll(role);
   }
 
   @Get(':id')
@@ -21,7 +31,10 @@ export class UserProfileController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserProfileDto: UpdateUserProfileDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateUserProfileDto: Prisma.UsersUpdateInput,
+  ) {
     return this.userProfileService.update(+id, updateUserProfileDto);
   }
 
