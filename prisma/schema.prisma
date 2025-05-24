@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Users {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String?
+  password      String
+  role          Role           @default(STUDENT)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  enrollments   Enrollment[]
+  subscriptions Subscription[]
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  classes     Class[]
+}
+
+model Class {
+  id          Int          @id @default(autoincrement())
+  name        String
+  courseId    Int
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  course      Course       @relation(fields: [courseId], references: [id])
+  enrollments Enrollment[]
+  videos      Video[]
+}
+
+model Enrollment {
+  id         Int              @id @default(autoincrement())
+  userId     Int
+  classId    Int
+  enrolledAt DateTime         @default(now())
+  status     EnrollmentStatus @default(ACTIVE)
+  class      Class            @relation(fields: [classId], references: [id])
+  user       Users            @relation(fields: [userId], references: [id])
+}
+
+model Video {
+  id        Int      @id @default(autoincrement())
+  title     String
+  url       String
+  classId   Int
+  createdAt DateTime @default(now())
+  class     Class    @relation(fields: [classId], references: [id])
+}
+
+model Subscription {
+  id        Int              @id @default(autoincrement())
+  userId    Int
+  type      SubscriptionType
+  startDate DateTime         @default(now())
+  endDate   DateTime
+  user      Users            @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+  TEACHER
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  INACTIVE
+  COMPLETED
+}
+
+enum SubscriptionType {
+  MONTHLY
+  QUARTERLY
+  SEMIANNUAL
+}
