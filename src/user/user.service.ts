@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UpdateUsersDTO } from './dtos/update-users-dto';
-import { CreateUsersDTO } from './dtos/create-users-dto';
+import { UpdateUserDTO } from './dtos/update-users-dto';
+import { CreateUserDTO } from './dtos/create-users-dto';
 
 @Injectable()
 export class UserService {
-  private users = [
+  private user = [
     {
       id: 1,
       name: 'John Smith',
@@ -188,27 +188,27 @@ export class UserService {
   ];
   findAll(role?: 'ADMIN' | 'TEACHER' | 'STUDENT') {
     if (role) {
-      const roleArray = this.users.filter((user) => user.role === role);
+      const roleArray = this.user.filter((user) => user.role === role);
       if (roleArray.length === 0)
         throw new NotFoundException('user role not found');
       return roleArray;
     }
-    return this.users;
+    return this.user;
   }
   findOne(id: number) {
-    const user = this.users.find((user) => user.id === id);
+    const user = this.user.find((user) => user.id === id);
     if (!user) throw new NotFoundException('user not found');
     return user;
   }
-  createUser(createUsersDTO: CreateUsersDTO) {
-    const usersByHighiestId = [...this.users].sort((a, b) => b.id - a.id);
+  createUser(createUsersDTO: CreateUserDTO) {
+    const usersByHighiestId = [...this.user].sort((a, b) => b.id - a.id);
     const newUser = { id: usersByHighiestId[0].id + 1, ...createUsersDTO };
-    this.users.push(newUser);
+    this.user.push(newUser);
     return newUser;
   }
 
-  update(id: number, updateUsersDTO: UpdateUsersDTO) {
-    this.users = this.users.map((user) => {
+  update(id: number, updateUsersDTO: UpdateUserDTO) {
+    this.user = this.user.map((user) => {
       if (user.id === id) {
         return { ...user, ...updateUsersDTO };
       }
@@ -219,7 +219,7 @@ export class UserService {
 
   delete(id: number) {
     const removedUser = this.findOne(id);
-    this.users = this.users.filter((user) => user.id !== id);
+    this.user = this.user.filter((user) => user.id !== id);
     return removedUser;
   }
 }

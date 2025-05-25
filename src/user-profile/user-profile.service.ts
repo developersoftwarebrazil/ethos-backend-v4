@@ -4,32 +4,32 @@ import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class UserProfileService {
-  constructor(private readonly databseService: DatabaseService) {}
-  async create(createUserProfileDto: Prisma.UsersCreateInput) {
-    return await this.databseService.users.create({
+  constructor(private readonly databaseService: DatabaseService) {}
+  async create(createUserProfileDto: Prisma.UserCreateInput) {
+    return await this.databaseService.user.create({
       data: createUserProfileDto,
     });
   }
 
   async findAll(role?: 'ADMIN' | 'STUDENT' | 'TEACHER') {
-    return await this.databseService.users.findMany({
+    return await this.databaseService.user.findMany({
       where: {
         role,
       },
     });
-    return this.databseService.users.findMany();
+    return this.databaseService.user.findMany();
   }
 
   async findOne(id: number) {
-    return await this.databseService.users.findUnique({
+    return await this.databaseService.user.findUnique({
       where: {
         id,
       },
     });
   }
 
-  async update(id: number, updateUserProfileDto: Prisma.UsersUpdateInput) {
-    return await this.databseService.users.update({
+  async update(id: number, updateUserProfileDto: Prisma.UserUpdateInput) {
+    return await this.databaseService.user.update({
       where: {
         id,
       },
@@ -38,7 +38,7 @@ export class UserProfileService {
   }
 
   async remove(id: number) {
-    return await this.databseService.users.delete({
+    return await this.databaseService.user.delete({
       where: {
         id,
       },

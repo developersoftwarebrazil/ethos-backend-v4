@@ -16,7 +16,7 @@ export class UserProfileController {
   constructor(private readonly userProfileService: UserProfileService) {}
 
   @Post()
-  create(@Body() createUserProfileDto: Prisma.UsersCreateInput) {
+  create(@Body() createUserProfileDto: Prisma.UserCreateInput) {
     return this.userProfileService.create(createUserProfileDto);
   }
 
@@ -33,7 +33,7 @@ export class UserProfileController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateUserProfileDto: Prisma.UsersUpdateInput,
+    @Body() updateUserProfileDto: Prisma.UserUpdateInput,
   ) {
     return this.userProfileService.update(+id, updateUserProfileDto);
   }
