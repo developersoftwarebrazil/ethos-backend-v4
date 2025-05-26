@@ -2,7 +2,7 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
-  IsPhoneNumber,
+  // IsPhoneNumber,
   IsString,
 } from 'class-validator';
 
@@ -14,7 +14,7 @@ export class CreateUserDTO {
   @IsEmail()
   email: string;
   password: string;
-  @IsPhoneNumber()
+  // @IsPhoneNumber()
   phone: string;
   imageUrl: string;
   @IsEnum(['ADMIN', 'STUDENT', 'TEACHER'], {
