@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateUserDTO } from './dtos/update-users-dto';
 import { CreateUserDTO } from './dtos/create-users-dto';
 import { DatabaseService } from 'src/database/database.service';
@@ -35,18 +31,33 @@ export class UserService {
   async createUser(data: CreateUserDTO) {
     return this.databaseService.user.create({ data });
   }
+  async update(id: number, updateUsersDTO: UpdateUserDTO) {
+    try {
+      await this.databaseService.user.update({
+        where: { id },
+        data: updateUsersDTO,
+      });
 
-  async update(id: number, data: UpdateUserDTO) {
-    await this.findOne(id); // Garantir que existe
-    console.log(data);
-    if (!data || Object.keys(data).length === 0) {
-      throw new BadRequestException('Nenhum dado para atualizar');
+      return this.findOne(id); // Ou pode usar prisma.user.findUnique se preferir
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Erro ao atualizar usuário:', error.message);
+      }
+      throw new Error('Erro ao atualizar o usuário');
     }
-    return this.databaseService.user.update({
-      where: { id },
-      data,
-    });
   }
+
+  // async update(id: number, data: UpdateUserDTO) {
+  //   await this.findOne(id); // Garantir que existe
+  //   if (!data || Object.keys(data).length === 0) {
+  //     throw new BadRequestException('Nenhum dado para atualizar');
+  //   }
+
+  //   return this.databaseService.user.update({
+  //     where: { id },
+  //     data: updateUsersDTO,
+  //   });
+  // }
   //   update(id: number, updateUsersDTO: UpdateUserDTO) {
   //     this.user = this.user.map((user) => {
   //       if (user.id === id) {
