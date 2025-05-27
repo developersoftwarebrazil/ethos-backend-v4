@@ -2,11 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateUserDTO } from './dtos/update-users-dto';
 import { CreateUserDTO } from './dtos/create-users-dto';
 import { DatabaseService } from 'src/database/database.service';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
+@SkipThrottle()
 @Injectable()
 export class UserService {
   constructor(private readonly databaseService: DatabaseService) {}
 
+  @SkipThrottle({ default: false })
   async findAll(role?: 'ADMIN' | 'TEACHER' | 'STUDENT') {
     const where = role ? { role } : {};
     const users = await this.databaseService.user.findMany({ where });
@@ -18,6 +21,7 @@ export class UserService {
     return users;
   }
 
+  @Throttle({ short: { ttl: 1000, limit: 1 } })
   async findOne(id: number) {
     const user = await this.databaseService.user.findUnique({ where: { id } });
 
