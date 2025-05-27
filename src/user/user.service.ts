@@ -47,27 +47,6 @@ export class UserService {
     }
   }
 
-  // async update(id: number, data: UpdateUserDTO) {
-  //   await this.findOne(id); // Garantir que existe
-  //   if (!data || Object.keys(data).length === 0) {
-  //     throw new BadRequestException('Nenhum dado para atualizar');
-  //   }
-
-  //   return this.databaseService.user.update({
-  //     where: { id },
-  //     data: updateUsersDTO,
-  //   });
-  // }
-  //   update(id: number, updateUsersDTO: UpdateUserDTO) {
-  //     this.user = this.user.map((user) => {
-  //       if (user.id === id) {
-  //         return { ...user, ...updateUsersDTO };
-  //       }
-  //       return user;
-  //     });
-  //     return this.findOne(id);
-  //   }
-
   async delete(id: number) {
     await this.findOne(id); // Garantir que existe
     return this.databaseService.user.delete({ where: { id } });
