@@ -8,6 +8,7 @@
   "scripts": {
     "prisma:migration": "npx prisma migrate dev --name init",
     "postinstall": "prisma generate",
+    "prebuild": "prisma generate",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run prisma:migration && nest start",
