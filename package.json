@@ -10,6 +10,9 @@
     "postinstall": "prisma generate",
     "prebuild": "prisma generate",
     "build": "nest build",
+    "postinstall": "prisma generate",
+    "build": "npx prisma generate && nest build",
+     feddc38 (funcionando localmente com banco nas nuvens da railway)
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run prisma:migration && nest start",
     "start:dev": "nest start --watch",
@@ -24,6 +27,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/throttler": "^6.4.0",
