@@ -6,15 +6,14 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate deploy",
     "prisma:migration": "npx prisma migrate dev --name init",
     "postinstall": "prisma generate",
     "prebuild": "prisma generate",
     "build": "nest build",
-    "postinstall": "prisma generate",
-    "build": "npx prisma generate && nest build",
-     feddc38 (funcionando localmente com banco nas nuvens da railway)
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "npm run prisma:migration && nest start",
+    "start": "npm run prisma:generate && node dist/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
